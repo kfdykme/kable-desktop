@@ -1,6 +1,6 @@
 <template>
   <div> 
-    <el-button @click="onOut">Get As a csv file</el-button>
+    <el-button v-show="data2.length >= 1" @click="onOut">Get As a csv file</el-button>
    <div 
             v-for="(t,ti) in data2" v-bind:key="t + ti">
                 <el-table
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+const { ipcRenderer } = require('electron')
+
 export default {
   name: 'HelloWorld',
   props: {
@@ -57,7 +59,7 @@ export default {
         },
         onOut () {
           
-          this.dealData(this.data2)
+          this.dealData(this.data2) 
         },
         dealData (ts) {
           let res = ts.map(t => {
@@ -68,9 +70,12 @@ export default {
             tt.members.map (r => {
               rows.push(' ,' + r)
             })
-            return [header].concat(rows)
+            return ['一级经销商,零售店,产品',header].concat(rows).join('\n')
           })
+          res = res.join('\n')
           console.info(res)
+
+          ipcRenderer .send('result', res)
         }
       }
 }

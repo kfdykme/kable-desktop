@@ -98,7 +98,7 @@ const handleList = (content) => {
         if (info == null) {
             info = {
                 count :0,
-                name: item[BOOS_COL],
+                name: item[BOOS_COL].trim(),
                 id: bossId,
                 subs: new Map(),
                 coms: function () {

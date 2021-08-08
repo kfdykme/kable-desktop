@@ -4,6 +4,23 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const { ipcMain } = require('electron')
+const fs = require('fs')
+const os = require('os');
+__dirname = os.homedir() + '/Desktop/' 
+
+console.info('KF', 'START')
+
+ipcMain.on('result', function (evidence, data) {
+  console.info('KF', data)
+
+  try {
+
+    fs.writeFileSync(__dirname + "result_" + new Date().getTime() + '.csv', data)
+  } catch (e) {
+    console.error(e)
+  }
+})
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
